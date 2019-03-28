@@ -5,26 +5,28 @@
  * board fills (tie)
  */
 
-var WIDTH = 7;
-var HEIGHT = 6;
+const WIDTH = 7;
+const HEIGHT = 6;
 
-var currPlayer = 1; // active player: 1 or 2
-var board = []; // array of rows, each row is array of cells  (board[y][x])
+let currPlayer = 1; // active player: 1 or 2
+let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
-function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+function makeBoard(HEIGHT, WIDTH) {
+  // Set "board" to empty HEIGHT x WIDTH matrix array
+  board = Array(HEIGHT).fill(Array(WIDTH).fill(null));
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "board" variable from the item in HTML w/ID of "board"
+  // Get "board" variable from the item in HTML w/ID of "board"
+  let board = document.getElementById("board");
 
-  // TODO: add comment for this code
+  // Creates header row for the board and adds a click event listener
   var top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
@@ -36,7 +38,7 @@ function makeHtmlBoard() {
   }
   board.append(top);
 
-  // TODO: add comment for this code
+  // Sets up the remaining grid of the board
   for (var y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
     for (var x = 0; x < WIDTH; x++) {
