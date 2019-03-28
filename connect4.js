@@ -61,10 +61,8 @@ function makeHtmlBoard() {
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
   for(let y = HEIGHT-1; y >= 0; y--) {
-    console.log("checking: ", y, x, board[y][x]);
   
     if(board[y][x] === null) {
-      console.log("Available spot in:", y, x);
       return y;
     }
   }
@@ -77,7 +75,10 @@ function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   let spot = document.createElement('div');
   spot.classList.add("piece");
-  spot.innerHTML = "X";
+
+
+  spot.classList.add(`p${currPlayer}`);
+  // spot.innerHTML = "X"; // for debugging purposes
   // spot.classList.add(player);
   
   let tableCell = document.getElementById(`${y}-${x}`);
@@ -90,6 +91,7 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -105,15 +107,14 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
-  console.log("before: ", board);
-
   placeInTable(y, x);
-  board[y][x] = true;
+  board[y][x] = currPlayer;
 
-  console.log("after: ", board);
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  const boardIsFull = board.every( row => ( row.every( item => (item !== null))));
+  if (boardIsFull) {
+    return endGame(`Tie game!`);
+  }
 
   // check for win
   if (checkForWin()) {
@@ -121,7 +122,7 @@ function handleClick(evt) {
   }
 
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
+  currPlayer = (currPlayer === 1) ? 2 : 1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -134,9 +135,9 @@ function checkForWin() {
 
     return cells.every(
         ([y, x]) =>
-            y >= 0 &&
+            y >= 0 &&       // checks if y is within the range [0, HEIGHT)
             y < HEIGHT &&
-            x >= 0 &&
+            x >= 0 &&       // checks if x is within the range [0, WIDTH]
             x < WIDTH &&
             board[y][x] === currPlayer
     );
