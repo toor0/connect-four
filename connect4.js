@@ -9,15 +9,21 @@ const WIDTH = 7;
 const HEIGHT = 6;
 
 let currPlayer = 1; // active player: 1 or 2
-let board = []; // array of rows, each row is array of cells  (board[y][x])
+var board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
-function makeBoard(HEIGHT, WIDTH) {
-  // Set "board" to empty HEIGHT x WIDTH matrix array
-  board = Array(HEIGHT).fill(Array(WIDTH).fill(null));
+function makeBoard() {
+  // // Set "board" to empty HEIGHT x WIDTH matrix array
+  for (let row=0; row < HEIGHT; row++) {
+    let currentRow = [];
+    for (let col=0; col < WIDTH; col++) {
+      currentRow.push(null);
+    }
+    board.push(currentRow);
+  }
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
@@ -54,8 +60,11 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  for(let y = HEIGHT; y >= 0; y--) {
+  for(let y = HEIGHT-1; y >= 0; y--) {
+    console.log("checking: ", y, x, board[y][x]);
+  
     if(board[y][x] === null) {
+      console.log("Available spot in:", y, x);
       return y;
     }
   }
@@ -64,14 +73,17 @@ function findSpotForCol(x) {
 
 /** placeInTable: update DOM to place piece into HTML board */
 
-function placeInTable(y, x, player) {
+function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   let spot = document.createElement('div');
   spot.classList.add("piece");
-  spot.classList.add(player);
+  spot.innerHTML = "X";
+  // spot.classList.add(player);
   
   let tableCell = document.getElementById(`${y}-${x}`);
   tableCell.append(spot);
+
+ 
 }
 
 /** endGame: announce game end */
@@ -94,8 +106,12 @@ function handleClick(evt) {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
-  placeInTable(y, x);
+  console.log("before: ", board);
 
+  placeInTable(y, x);
+  board[y][x] = true;
+
+  console.log("after: ", board);
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
 
