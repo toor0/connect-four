@@ -6,14 +6,20 @@ td {
   border: solid 1px black;
 }
 
+
+
 /* pieces are div within game table cells: draw as colored circles */
 
 .piece {
   /* TODO: make into circles */
+  position: relative;
   margin: 5px;
   width: 80%;
   height: 80%;
   border-radius: 50%;
+  animation: bounce 0.5s;
+  z-index: -1;
+  /* animation-direction: alternate; */
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
@@ -27,5 +33,18 @@ td {
 
 
 /* column-top is table row of clickable areas for each column */
+#column-top > td {
+  z-index: 0;
+}
+
+#column-top > td:hover {
+  background-color: silver;
+  position: relative;
+}
 
 /* TODO: make column-top row lighter and provide hover effect */
+
+@keyframes bounce {
+  from { transform: translate3d(0, -50vh, 0);     }
+  to   { transform: translate3d(0, 0, 0); }
+}
